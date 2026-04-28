@@ -1,0 +1,8 @@
+# Core dependencies for eOn NEB runner
+numpy>=1.20
+ase>=3.22
+rgpycrumbs>=1.0
+
+# Optional: PyTorch for GPU support
+# Install separately with conda or pip depending on CUDA version
+# torch>=2.0
