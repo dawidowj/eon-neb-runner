@@ -245,28 +245,7 @@ flake8 eon_neb/
 
 If you use this code, please cite:
 
-- eOn: [relevant eOn paper]
-- PET-MAD: [relevant model paper]
-- Your work (coming soon!)
-
 ## License
-
-[Specify license - BSD-3-Clause recommended for compatibility with eOn]
-
 ## Contributing
-
-Contributions welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new features
-4. Submit a pull request
-
 ## Contact
-
-[Your contact information]
-
 ## Acknowledgments
-
-- PNNL ChemReasoner team
-- eOn development team
-- Collaborators: Pragya, [others]
