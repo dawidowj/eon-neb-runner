@@ -19,7 +19,10 @@ A Python package for running Nudged Elastic Band (NEB) calculations using [eOn](
    - Install via conda: `conda install -c conda-forge eon`
    - Or build from source: https://github.com/TheochemUI/eOn
 
-2. **ML Model**: You need a trained model checkpoint (e.g., PET-MAD-S)
+2. **metatensor-tools**: Required to convert model checkpoints
+   - Install via conda: `conda install -c conda-forge metatensor-tools`
+
+3. **ML Model**: You need a trained model checkpoint (e.g., PET-MAD-S)
 
 ### Install from source
 
@@ -40,6 +43,49 @@ This will check:
 - Required packages (ASE, NumPy, rgpycrumbs)
 - eOn executable
 - CUDA availability (if applicable)
+
+### Obtaining the ML Model
+
+This package requires a metatensor-compatible model checkpoint (`.pt` file). You can obtain and convert the PET-MAD model from Hugging Face:
+
+**Option 1: Using Python**
+
+```python
+import subprocess
+from pathlib import Path
+
+repo_id = "lab-cosmo/upet"
+tag = "v1.5.0"
+url_path = f"models/pet-mad-s-{tag}.ckpt"
+fname = Path(f"models/pet-mad-s-{tag}.pt")
+url = f"https://huggingface.co/{repo_id}/resolve/main/{url_path}"
+
+fname.parent.mkdir(parents=True, exist_ok=True)
+subprocess.run(
+    [
+        "mtt",
+        "export",
+        url,
+        "-o",
+        str(fname),
+    ],
+    check=True,
+)
+print(f"Successfully exported {fname}.")
+```
+
+**Option 2: Using command line**
+
+```bash
+mkdir -p models
+mtt export https://huggingface.co/lab-cosmo/upet/resolve/main/models/pet-mad-s-v1.5.0.ckpt -o models/pet-mad-s-v1.5.0.pt
+```
+
+The converted model file can then be used with the runner:
+
+```bash
+eon-neb reactant.con product.con --model models/pet-mad-s-v1.5.0.pt
+```
 
 ## Quick Start
 
@@ -223,6 +269,14 @@ eon-neb reactant.con product.con --model model.pt --device cpu
 Verify model path:
 ```bash
 ls -lh /path/to/model.pt
+```
+
+### mtt export fails
+
+Ensure metatensor-tools is installed:
+```bash
+conda install -c conda-forge metatensor-tools
+mtt --version
 ```
 
 ## Development
