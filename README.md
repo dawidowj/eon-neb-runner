@@ -174,7 +174,7 @@ result.to_json(Path("output/neb_results.json"))
 | `n_images` | 8 | Number of intermediate NEB images |
 | `max_iterations` | 3000 | Maximum NEB iterations |
 | `device` | "cuda" | Device for calculations ("cuda" or "cpu") |
-| `metals` | See code | Set of metal symbols to freeze |
+
 
 ### Advanced Settings
 
@@ -230,20 +230,8 @@ Each NEB calculation produces:
 
 ## Examples
 
-See `examples/` directory for:
-- Simple diffusion barriers
-- Surface reaction pathways
-- CO2 reduction on CeFe oxide (coming soon with Pragya's structures)
+Coming soon!
 
-## For ChemReasoner Integration
-
-This package is designed to be used as an agent within the [ChemReasoner](https://github.com/pnnl/chemreasoner) framework:
-
-1. **Input**: JSON file specifying reactant/product structures and calculation parameters
-2. **Processing**: Automated NEB calculation with ML potential
-3. **Output**: JSON file with barrier heights and reaction energies
-
-See `examples/chemreasoner_agent/` for integration templates (TODO).
 
 ## Troubleshooting
 
