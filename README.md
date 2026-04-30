@@ -48,17 +48,21 @@ This will check:
 
 This package requires a metatensor-compatible model checkpoint (`.pt` file). You can obtain and convert the PET-MAD model from Hugging Face:
 
-**Option 1: Using Python**
+
+**Example 1: Using command line**
+
+```bash
+mkdir -p models
+mtt export https://huggingface.co/lab-cosmo/upet/resolve/main/models/pet-mad-s-v1.5.0.ckpt -o models/pet-mad-s-v1.5.0.pt
+```
+**Example 2: Using Python**
 
 ```python
 import subprocess
 from pathlib import Path
 
-repo_id = "lab-cosmo/upet"
-tag = "v1.5.0"
-url_path = f"models/pet-mad-s-{tag}.ckpt"
-fname = Path(f"models/pet-mad-s-{tag}.pt")
-url = f"https://huggingface.co/{repo_id}/resolve/main/{url_path}"
+fname = Path(f"models/pet-mad-s-v1.5.0.pt")
+url = "https://huggingface.co/lab-cosmo/upet/resolve/main/models/pet-mad-s-v1.5.0.ckpt"
 
 fname.parent.mkdir(parents=True, exist_ok=True)
 subprocess.run(
@@ -74,12 +78,6 @@ subprocess.run(
 print(f"Successfully exported {fname}.")
 ```
 
-**Option 2: Using command line**
-
-```bash
-mkdir -p models
-mtt export https://huggingface.co/lab-cosmo/upet/resolve/main/models/pet-mad-s-v1.5.0.ckpt -o models/pet-mad-s-v1.5.0.pt
-```
 
 The converted model file can then be used with the runner:
 
