@@ -17,6 +17,10 @@ except ImportError:
         "rgpycrumbs not found. Install with: pip install rgpycrumbs"
     )
 
+from pymatgen.core import Structure
+from pymatgen.io.ase import AseAtomsAdaptor
+from pymatgen.io.json import MontyDecoder
+
 from .config import NEBConfig
 
 
@@ -88,13 +92,33 @@ class NEBRunner:
 
 
     def atoms_from_dict(self, d: dict) -> Atoms:
-        """Convert JSON dict to ASE Atoms."""
-        return Atoms(
-            symbols=d["symbols"],
-            positions=d["positions"],
-            cell=d["cell"],
-            pbc=d["pbc"]
-        )
+        """Convert JSON dict to ASE Atoms (supports both pymatgen and simple formats).
+        
+        Args:
+            d: Dictionary representation of atoms/structure
+            
+        Returns:
+            ASE Atoms object
+        """
+        # Try pymatgen Structure format first (from Structure.to_dict())
+        if "@module" in d or "lattice" in d:
+            try:
+                structure = Structure.from_dict(d)
+                return AseAtomsAdaptor.get_atoms(structure)
+            except Exception as e:
+                raise ValueError(f"Failed to parse pymatgen Structure dict: {e}")
+        
+        # Fall back to simple ASE format
+        else:
+            try:
+                return Atoms(
+                    symbols=d["symbols"],
+                    positions=d["positions"],
+                    cell=d["cell"],
+                    pbc=d["pbc"]
+                )
+            except KeyError as e:
+                raise ValueError(f"Missing required key in atoms dict: {e}")
     
 
     def get_constraints(self, atoms: Atoms, stage: str = "neb") -> FixAtoms:
@@ -420,12 +444,29 @@ class NEBRunner:
         return self.run_neb(initial, final, workdir)
         
     def run_from_json(self, json_file: Path, base_workdir: Path) -> dict:
-        """Run NEBs from JSON input with embedded structures."""
+        """Run NEBs from JSON input with embedded structures.
         
+        Supports both pymatgen Structure format and simple ASE format.
+        Uses MontyDecoder if available, falls back to regular JSON parsing.
+        
+        Args:
+            json_file: Path to JSON file with NEB jobs
+            base_workdir: Base working directory for calculations
+            
+        Returns:
+            Dictionary with results for each job
+        """
+        
+        # Use MontyDecoder if the JSON was created with MontyEncoder
         with open(json_file) as f:
-            jobs = json.load(f)
+            try:
+                jobs = json.load(f, cls=MontyDecoder)
+            except TypeError:
+                # MontyDecoder not available or not needed, fallback to regular JSON
+                f.seek(0)
+                jobs = json.load(f)
         
-            results = {}
+        results = {}
     
         for i, job in enumerate(jobs):
             name = job.get("comment", f"job_{i}")
@@ -434,12 +475,12 @@ class NEBRunner:
             print(f"RUNNING: {name}")
             print("#"*70)
         
-            # Convert dict → ASE
+            # Convert dict → ASE (now handles both pymatgen and simple formats)
             initial = self.atoms_from_dict(job["initial"])
             final = self.atoms_from_dict(job["final"])
             
             # ================================
-            # NEW: config overrides per job
+            # Config overrides per job
             # ================================
             job_config = self.config.with_overrides(
                 freeze_strategy=job.get("freeze_strategy"),

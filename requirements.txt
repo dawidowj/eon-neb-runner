@@ -2,6 +2,7 @@
 numpy>=1.20
 ase>=3.22
 rgpycrumbs>=1.0
+pymatgen>=2024.1.1
 
 # Optional: PyTorch for GPU support
 # Install separately with conda or pip depending on CUDA version
