@@ -19,7 +19,6 @@ except ImportError:
 
 from pymatgen.core import Structure
 from pymatgen.io.ase import AseAtomsAdaptor
-from pymatgen.io.json import MontyDecoder
 
 from .config import NEBConfig
 
@@ -447,7 +446,6 @@ class NEBRunner:
         """Run NEBs from JSON input with embedded structures.
         
         Supports both pymatgen Structure format and simple ASE format.
-        Uses MontyDecoder if available, falls back to regular JSON parsing.
         
         Args:
             json_file: Path to JSON file with NEB jobs
@@ -457,14 +455,8 @@ class NEBRunner:
             Dictionary with results for each job
         """
         
-        # Use MontyDecoder if the JSON was created with MontyEncoder
         with open(json_file) as f:
-            try:
-                jobs = json.load(f, cls=MontyDecoder)
-            except TypeError:
-                # MontyDecoder not available or not needed, fallback to regular JSON
-                f.seek(0)
-                jobs = json.load(f)
+            jobs = json.load(f)
         
         results = {}
     
