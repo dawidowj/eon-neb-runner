@@ -60,9 +60,9 @@ Checks:
 
 ---
 
-## Models (IMPORTANT)
+## Models
 
-### Quick test mode (recommended)
+### Quick test mode 
 
 A lightweight example model is included:
 
@@ -82,7 +82,7 @@ eon-neb reactant.con product.con \
 
 ---
 
-### Full PET-MAD workflow (advanced)
+### Full PET-MAD workflow
 
 To use production-quality PET-MAD models, export a checkpoint from Hugging Face:
 
