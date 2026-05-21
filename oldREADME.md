@@ -137,31 +137,7 @@ else:
     print(f"Failed: {result.error_message}")
 ```
 
-### JSON Interface (for ChemReasoner integration)
 
-```python
-import json
-from pathlib import Path
-from eon_neb import NEBConfig, NEBRunner
-from ase.io import read
-
-# Load configuration from JSON
-config = NEBConfig.from_json(Path("neb_config.json"))
-
-# Run calculation
-runner = NEBRunner(config)
-
-# Load structures from JSON-specified paths
-with open("pathway_spec.json") as f:
-    pathway = json.load(f)
-
-initial = read(pathway["reactant_structure"])
-final = read(pathway["product_structure"])
-
-result = runner.run_neb(initial, final, Path("output"))
-
-# Save results to JSON
-result.to_json(Path("output/neb_results.json"))
 ```
 
 ## Configuration
