@@ -26,7 +26,7 @@ class NEBConfig:
     device: str = "cuda"
 
     # Global defaults
-    freeze_strategy: str = "none"
+    freeze_strategy: str = "element"
     freeze_indices: Optional[List[int]] = None
     freeze_elements: Optional[List[str]] = None
     freeze_z_max: Optional[float] = None
@@ -49,7 +49,6 @@ class NEBConfig:
     metals: Set[str] = field(default_factory=lambda: {
         "Pt", "Ni", "Fe", "Co", "Cu", "Ag", "Au", "Pd",
         "Ir", "Rh", "Ru", "Os", "Re", "W", "Mo", "Cr",
-        "V", "Ti", "Mn", "Zn", "Al", "Ce"  # Added Ce for CeFe oxide
     })
     
     # Endpoint minimization settings

@@ -1,0 +1,21 @@
+{
+  "model_path": "../models/pet-mad-s-v1.5.0.pt",
+  "n_images": 6,
+  "max_iterations": 3000,
+  "device": "cpu",
+  "freeze_strategy": "element",
+  "endpoint_min_settings": {
+    "opt_method": "FIRE",
+    "max_iterations": 75,
+    "max_move": 0.07,
+    "converged_force": 0.05
+  },
+  "neb_settings": {
+    "spring": 4.0,
+    "climbing_image_method": true,
+    "ci_after_rel": 0.5,
+    "energy_weighted": true,
+    "ew_ksp_min": 0.99,
+    "ew_ksp_max": 2.59
+  }
+}

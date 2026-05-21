@@ -1,0 +1,42 @@
+{
+  "CO_hop_Au": {
+    "success": true,
+    "reaction_energy_eV": 0.0,
+    "forward_barrier_eV": 0.045288,
+    "reverse_barrier_eV": 0.045288,
+    "ts_index": 2,
+    "ts_energy_eV": 0.045288,
+    "neb_path": "wd7ortho/CO_hop_Au",
+    "error_message": null
+  },
+  "CO_hop_Pt": {
+    "success": true,
+    "reaction_energy_eV": 0.0,
+    "forward_barrier_eV": 0.334229,
+    "reverse_barrier_eV": 0.334229,
+    "ts_index": 5,
+    "ts_energy_eV": 0.334229,
+    "neb_path": "wd7ortho/CO_hop_Pt",
+    "error_message": null
+  },
+  "CO_hop_Cu": {
+    "success": true,
+    "reaction_energy_eV": -1.5e-05,
+    "forward_barrier_eV": 0.037949,
+    "reverse_barrier_eV": 0.037964,
+    "ts_index": 2,
+    "ts_energy_eV": 0.037949,
+    "neb_path": "wd7ortho/CO_hop_Cu",
+    "error_message": null
+  },
+  "CO_hop_Ni": {
+    "success": true,
+    "reaction_energy_eV": 0.0,
+    "forward_barrier_eV": 0.121307,
+    "reverse_barrier_eV": 0.121307,
+    "ts_index": 5,
+    "ts_energy_eV": 0.121307,
+    "neb_path": "wd7ortho/CO_hop_Ni",
+    "error_message": null
+  }
+}

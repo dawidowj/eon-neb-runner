@@ -1,0 +1,5 @@
+First, check the config file to make sure that the device (cpu or cuda) is correct. Then, make sure that the path to the .pt model checkpoint file is correct.
+
+Then, to run the NEB, use 
+
+eon-neb --config [config file name] --workdir [directory to store output files] POSCAR_initial POSCAR_final 

@@ -103,9 +103,19 @@ class NEBRunner:
         if "@module" in d or "lattice" in d:
             try:
                 structure = Structure.from_dict(d)
-                return AseAtomsAdaptor.get_atoms(structure)
+        
+                atoms = Atoms(
+                    symbols=[str(site.specie) for site in structure],
+                    positions=structure.cart_coords,
+                    cell=structure.lattice.matrix,
+                    pbc=True,
+                )
+        
+                return atoms
+        
             except Exception as e:
                 raise ValueError(f"Failed to parse pymatgen Structure dict: {e}")
+
         
         # Fall back to simple ASE format
         else:
@@ -210,6 +220,12 @@ class NEBRunner:
         """
         print(f"\n=== Minimizing {structure_name} in {workdir} ===")
         workdir.mkdir(parents=True, exist_ok=True)
+        
+#        # Force scaled positions
+#        scaled_positions = atoms.get_scaled_positions()
+#        atoms_scaled = atoms.copy()
+#        atoms_scaled.positions = scaled_positions
+        
         
         # Write structure
         write(workdir / "pos.con", atoms)
@@ -474,17 +490,23 @@ class NEBRunner:
             # ================================
             # Config overrides per job
             # ================================
-            job_config = self.config.with_overrides(
-                freeze_strategy=job.get("freeze_strategy"),
-                freeze_indices=job.get("freeze_indices"),
-                freeze_z_max=job.get("freeze_z_max"),
-                freeze_n_layers=job.get("freeze_n_layers"),
-            )
+            overrides = {}
+            if "freeze_strategy" in job:
+                overrides["freeze_strategy"] = job["freeze_strategy"]
+            if "freeze_indices" in job:
+                overrides["freeze_indices"] = job["freeze_indices"]
+            if "freeze_z_max" in job:
+                overrides["freeze_z_max"] = job["freeze_z_max"]
+            if "freeze_n_layers" in job:
+                overrides["freeze_n_layers"] = job["freeze_n_layers"]
+            
+            job_config = self.config.with_overrides(**overrides)
             
             workdir = base_workdir / name.replace(" ", "_")
             workdir.mkdir(parents=True, exist_ok=True)
             
-            result = self.run_neb(initial, final, workdir)
+            runner = NEBRunner(job_config)
+            result = runner.run_neb(initial, final, workdir)
             results[name] = result.to_dict()
 
         # Save batch summary

@@ -65,3 +65,4 @@ Thumbs.db
 examples/*/neb_output/
 examples/*/reactant_min/
 examples/*/product_min/
+*.pt
